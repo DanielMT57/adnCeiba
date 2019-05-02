@@ -26,14 +26,7 @@ pipeline {
 				submoduleCfg: [],
 				userRemoteConfigs: [[credentialsId: 'GitHub_daniel.moncada', url: 'https://github.com/DanielMT57/adnCeiba']]]) 				
 			}     
-		}
-		 
-		stage('Build') {
-			steps {
-				echo "------------>Build<------------"
-				sh 'gradle --b ./build.gradle build -x test'
-			}
-		} 
+		}       
 		
 		stage('Unit Tests') {       
 			steps{         
@@ -52,12 +45,17 @@ pipeline {
 			steps{
 				echo '------------>Análisis de código estático<------------'
 				withSonarQubeEnv('Sonar') { 
-					sh "${tool name: 'SonarScanner', type:'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties" 
+					sh "${tool name: 'SonarScanner', type:'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner" 
 				}       
 			}     
 		}
 		
-		
+		stage('Build') {
+			steps {
+				echo "------------>Build<------------"
+				sh 'gradle --b ./build.gradle build -x test'
+			}
+		} 
 	}
 	
 	

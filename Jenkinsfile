@@ -18,20 +18,20 @@ pipeline {
 			steps{         
 				echo "------------>Checkout<------------"
 				checkout(
-				[$​class: 'GitSCM​',
+				[$class: 'GitSCM',
 				branches: [[name: '*/develop']],
 				doGenerateSubmoduleConfigurations: false,
 				extensions: [],
 				gitTool: 'Git_Centos',
 				submoduleCfg: [],
-				userRemoteConfigs: [[​credentialsId: 'GitHub_daniel.moncada', url: 'https://github.com/DanielMT57/adnCeiba']]]) 				
+				userRemoteConfigs: [[credentialsId: 'GitHub_daniel.moncada', url: 'https://github.com/DanielMT57/adnCeiba']]]) 				
 			}     
 		}       
 		
 		stage('Unit Tests') {       
 			steps{         
 				echo "------------>Unit Tests<------------" 
-				sh '​gradle --b ./build.gradle test​' 
+				sh 'gradle --b ./build.gradle test' 
 			}     
 		} 
 		
@@ -53,7 +53,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "------------>Build<------------"
-				sh '​gradle --b ./build.gradle build -x test​'
+				sh 'gradle --b ./build.gradle build -x test'
 			}
 		} 
 	}
@@ -69,7 +69,7 @@ pipeline {
 		}
 		
 		failure {
-			mail (to: 'daniel.moncada@ceiba.com.co​',subject: "​FailedPipeline: ${currentBuild.fullDisplayName}​",body: "​Ocurrió el siguiente error ${env.BUILD_URL}​")
+			mail (to: 'daniel.moncada@ceiba.com.co',subject: "FailedPipeline: ${currentBuild.fullDisplayName}",body: "Ocurrió el siguiente error ${env.BUILD_URL}")
 		}
 		
 		unstable {

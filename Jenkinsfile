@@ -31,7 +31,7 @@ pipeline {
 		stage('Unit Tests') {       
 			steps{         
 				echo "------------>Unit Tests<------------" 
-				sh 'gradle --b ./build.gradle test' 
+				sh 'gradle --b ./build.gradle clean test' 
 			}     
 		} 
 		
@@ -53,7 +53,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "------------>Build<------------"
-				sh 'gradle --b ./build.gradle build -x test'
+				sh 'gradle --b ./build.gradle clean build -x test'
 			}
 		} 
 	}

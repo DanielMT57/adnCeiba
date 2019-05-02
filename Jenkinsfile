@@ -26,7 +26,14 @@ pipeline {
 				submoduleCfg: [],
 				userRemoteConfigs: [[credentialsId: 'GitHub_daniel.moncada', url: 'https://github.com/DanielMT57/adnCeiba']]]) 				
 			}     
-		}       
+		}
+		 
+		stage('Build') {
+			steps {
+				echo "------------>Build<------------"
+				sh 'gradle --b ./build.gradle build -x test'
+			}
+		} 
 		
 		stage('Unit Tests') {       
 			steps{         
@@ -50,12 +57,7 @@ pipeline {
 			}     
 		}
 		
-		stage('Build') {
-			steps {
-				echo "------------>Build<------------"
-				sh 'gradle --b ./build.gradle build -x test'
-			}
-		} 
+		
 	}
 	
 	

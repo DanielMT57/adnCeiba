@@ -53,6 +53,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "------------>Build<------------"
+				sh '​gradle --b ./build.gradle build -x test​'
 			}
 		} 
 	}
@@ -64,11 +65,11 @@ pipeline {
 		}
 		
 		success {
-			echo 'This will run only if successful'
+			junit ​'**/build/test-results/test/*.xml'
 		}
 		
 		failure {
-			echo 'This will run only if failed'
+			mail (to: 'daniel.moncada@ceiba.com.co​',subject: "​FailedPipeline: ${currentBuild.fullDisplayName}​",body: "​Ocurrió el siguiente error ${env.BUILD_URL}​")
 		}
 		
 		unstable {

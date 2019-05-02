@@ -19,10 +19,10 @@ pipeline {
 				echo "------------>Checkout<------------"
 				checkout(
 				[$​class: 'GitSCM​',
-				​branches: [[name: '*/develop']]​,
+				branches: [[name: '*/develop']],
 				doGenerateSubmoduleConfigurations: false,
 				extensions: [],
-				​gitTool: 'Git_Centos'​,
+				gitTool: 'Git_Centos',
 				submoduleCfg: [],
 				userRemoteConfigs: [[​credentialsId: 'GitHub_daniel.moncada', url: 'https://github.com/DanielMT57/adnCeiba']]]) 				
 			}     
@@ -65,7 +65,7 @@ pipeline {
 		}
 		
 		success {
-			junit ​'**/build/test-results/test/*.xml'
+			junit '**/build/test-results/test/*.xml'
 		}
 		
 		failure {

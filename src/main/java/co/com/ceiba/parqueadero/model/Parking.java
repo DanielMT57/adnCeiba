@@ -1,7 +1,7 @@
 package co.com.ceiba.parqueadero.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +22,10 @@ public class Parking {
 	private Integer id;
 
 	@Column(name = "in_datetime", nullable = false)
-	private LocalDate inDatetime;
+	private LocalDateTime inDatetime;
 
 	@Column(name = "out_datetime")
-	private LocalDate outDatetime;
+	private LocalDateTime outDatetime;
 
 	@Column(name = "total_time")
 	private String totalTime;
@@ -37,6 +37,16 @@ public class Parking {
 	@JoinColumn(name = "license_plate")
 	private Vehicle vehicle;
 
+	public Parking() {
+		super();
+	}
+
+	public Parking(LocalDateTime inDatetime, Vehicle vehicle) {
+		super();
+		this.inDatetime = inDatetime;
+		this.vehicle = vehicle;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -45,19 +55,19 @@ public class Parking {
 		this.id = id;
 	}
 
-	public LocalDate getInDatetime() {
+	public LocalDateTime getInDatetime() {
 		return inDatetime;
 	}
 
-	public void setInDatetime(LocalDate inDatetime) {
+	public void setInDatetime(LocalDateTime inDatetime) {
 		this.inDatetime = inDatetime;
 	}
 
-	public LocalDate getOutDatetime() {
+	public LocalDateTime getOutDatetime() {
 		return outDatetime;
 	}
 
-	public void setOutDatetime(LocalDate outDatetime) {
+	public void setOutDatetime(LocalDateTime outDatetime) {
 		this.outDatetime = outDatetime;
 	}
 

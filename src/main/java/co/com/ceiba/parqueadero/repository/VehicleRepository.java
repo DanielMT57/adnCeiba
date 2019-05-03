@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 @Repository
-public interface IVehicleRepository extends JpaRepository<Vehicle, String> {
+public interface VehicleRepository extends JpaRepository<Vehicle, String> {
 
 	@Query("SELECT v FROM Vehicle v WHERE v.licensePlate = ?1")
 	Vehicle findByPlate(String licensePlate);

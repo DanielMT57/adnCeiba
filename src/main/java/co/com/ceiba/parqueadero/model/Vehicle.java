@@ -23,6 +23,17 @@ public class Vehicle implements Serializable {
 	@Column(name = "type", nullable = false)
 	private Integer type;
 
+	public Vehicle() {
+		super();
+	}
+
+	public Vehicle(String licensePlate, Integer cylinderPower, Integer type) {
+		super();
+		this.licensePlate = licensePlate;
+		this.cylinderPower = cylinderPower;
+		this.type = type;
+	}
+
 	public String getLicensePlate() {
 		return licensePlate;
 	}

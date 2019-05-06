@@ -12,7 +12,7 @@ public class VehicleDataBuilder {
 	public static final String MESSAGE_INVALID_LICENSE_PLATE = "La placa a\u00F1adida no es v\u00E1lida";
 
 	public static final String MESSAGE_INVALID_DAY = "No puede ingresar porque no est\u00E1 en un d\u00EDa habil";
-	
+
 	public static final String MESSAGE_INVALID_FULL_PARKING = "No hay espacio disponible para este veh\u00EDculo";
 
 	private String licensePlate;
@@ -37,7 +37,7 @@ public class VehicleDataBuilder {
 	}
 
 	public VehicleDTO build() {
-		return new VehicleDTO(this.licensePlate, this.cylinderPower, this.type);
+		return new VehicleDTO(this.licensePlate, this.cylinderPower, this.type, "");
 	}
 
 }

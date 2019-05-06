@@ -32,7 +32,7 @@ pipeline {
 			steps{         
 				echo "------------>Unit Tests<------------" 
 				sh 'gradle --b ./build.gradle clean test'
-				junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
+				junit '**/build/test-results/test/*.xml'
 				step( [ $class: 'JacocoPublisher' ] )
 			}     
 		} 

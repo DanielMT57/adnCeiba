@@ -1,5 +1,6 @@
 package co.com.ceiba.parqueadero.service.impl;
 
+import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
@@ -22,6 +23,8 @@ import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 @Component
 public class ParkingServiceImpl implements IParkingService {
 
+	private Clock clock;
+
 	@Autowired
 	private ParkingRepository parkingRepository;
 
@@ -40,8 +43,21 @@ public class ParkingServiceImpl implements IParkingService {
 	@Override
 	public ParkingDTO createParking(VehicleDTO vehicleDTO) throws ParkingException {
 		String licensePlate = vehicleDTO.getLicensePlate();
+		// parameter validation
 		Validation.checkNullOrEmpty(licensePlate, "placa");
-		VehicleTypeEnum vehicleType = VehicleTypeEnum.checkLicensePlate(licensePlate);
+		Validation.checkNull(vehicleDTO.getCylinderPower(), "cilindraje");
+		VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(licensePlate);
+		clock = Clock.systemUTC();
+		LocalDateTime inDatetime = LocalDateTime.now(clock);
+		validateVehicle(vehicleType, licensePlate, inDatetime);
+		Vehicle vehicle = getVehicle(vehicleDTO, vehicleType);
+		Parking parking = new Parking(inDatetime, vehicle);
+		parking = parkingRepository.save(parking);
+		return modelMapper.map(parking, ParkingDTO.class);
+	}
+
+	public void validateVehicle(VehicleTypeEnum vehicleType, String licensePlate, LocalDateTime inDatetime)
+			throws ParkingException {
 		if (null == vehicleType) {
 			throw new ParkingException("La placa a\u00F1adida no es v\u00E1lida");
 		}
@@ -56,24 +72,20 @@ public class ParkingServiceImpl implements IParkingService {
 			throw new ParkingException("No hay espacio disponible para este veh\u00EDculo");
 		}
 
-		Vehicle vehicle = vehicleRepository.findByPlate(licensePlate);
-
-		if (null == vehicle) {
-			Validation.checkNull(vehicleDTO.getCylinderPower(), "cilindraje");
-			vehicle = new Vehicle(licensePlate, Integer.valueOf(vehicleDTO.getCylinderPower()),
-					vehicleType.getVehicleType());
-			vehicle = vehicleRepository.saveAndFlush(vehicle);
-		}
-
-		LocalDateTime inDatetime = LocalDateTime.now();
 		if (licensePlate.startsWith("A") && (!inDatetime.getDayOfWeek().equals(DayOfWeek.SUNDAY)
 				|| !inDatetime.getDayOfWeek().equals(DayOfWeek.MONDAY))) {
 			throw new ParkingException("No puede ingresar porque no est\u00E1 en un d\u00EDa habil");
 		}
+	}
 
-		Parking parking = new Parking(inDatetime, vehicle);
-		parking = parkingRepository.save(parking);
-		return modelMapper.map(parking, ParkingDTO.class);
+	public Vehicle getVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
+		Vehicle vehicle = vehicleRepository.findByPlate(vehicleDTO.getLicensePlate());
+		if (null == vehicle) {
+			vehicle = new Vehicle(vehicleDTO.getLicensePlate(), Integer.valueOf(vehicleDTO.getCylinderPower()),
+					vehicleType.getVehicleType());
+			vehicle = vehicleRepository.saveAndFlush(vehicle);
+		}
+		return vehicle;
 	}
 
 }

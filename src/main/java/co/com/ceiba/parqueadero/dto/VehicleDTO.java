@@ -29,20 +29,20 @@ public class VehicleDTO implements Serializable {
 		this.licensePlate = licensePlate;
 	}
 
-	public Integer getCylinderPower() {
-		return cylinderPower;
-	}
-
-	public void setCylinderPower(Integer cylinderPower) {
-		this.cylinderPower = cylinderPower;
-	}
-
 	public Integer getType() {
 		return type;
 	}
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Integer getCylinderPower() {
+		return cylinderPower;
+	}
+
+	public void setCylinderPower(Integer cylinderPower) {
+		this.cylinderPower = cylinderPower;
 	}
 
 }

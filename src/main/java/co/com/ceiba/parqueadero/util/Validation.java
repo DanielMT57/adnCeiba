@@ -2,7 +2,7 @@ package co.com.ceiba.parqueadero.util;
 
 import co.com.ceiba.parqueadero.exception.ParkingException;
 
-public class Validation {
+public final class Validation {
 
 	private Validation() {
 

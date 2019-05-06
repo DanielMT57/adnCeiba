@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class ParkingDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 	private LocalDateTime inDatetime;
 	private LocalDateTime outDatetime;
@@ -21,14 +21,6 @@ public class ParkingDTO implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public LocalDateTime getInDatetime() {
-		return inDatetime;
-	}
-
-	public void setInDatetime(LocalDateTime inDatetime) {
-		this.inDatetime = inDatetime;
 	}
 
 	public LocalDateTime getOutDatetime() {
@@ -61,6 +53,14 @@ public class ParkingDTO implements Serializable {
 
 	public void setVehicleDTO(VehicleDTO vehicleDTO) {
 		this.vehicleDTO = vehicleDTO;
+	}
+
+	public LocalDateTime getInDatetime() {
+		return inDatetime;
+	}
+
+	public void setInDatetime(LocalDateTime inDatetime) {
+		this.inDatetime = inDatetime;
 	}
 
 }

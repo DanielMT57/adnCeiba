@@ -29,24 +29,12 @@ public enum VehicleTypeEnum {
 		return vehicleType;
 	}
 
-	public void setVehicleType(Integer vehicleType) {
-		this.vehicleType = vehicleType;
-	}
-
 	public String getLicensePlateRegex() {
 		return licensePlateRegex;
 	}
 
-	public void setLicensePlateRegex(String licensePlateRegex) {
-		this.licensePlateRegex = licensePlateRegex;
-	}
-
 	public String getVehicleTypeName() {
 		return vehicleTypeName;
-	}
-
-	public void setVehicleTypeName(String vehicleTypeName) {
-		this.vehicleTypeName = vehicleTypeName;
 	}
 
 }

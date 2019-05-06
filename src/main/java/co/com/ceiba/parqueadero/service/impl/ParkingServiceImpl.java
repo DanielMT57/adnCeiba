@@ -81,7 +81,7 @@ public class ParkingServiceImpl implements IParkingService {
 	public Vehicle getVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
 		Vehicle vehicle = vehicleRepository.findByPlate(vehicleDTO.getLicensePlate());
 		if (null == vehicle) {
-			vehicle = new Vehicle(vehicleDTO.getLicensePlate(), Integer.valueOf(vehicleDTO.getCylinderPower()),
+			vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(),
 					vehicleType.getVehicleType());
 			vehicle = vehicleRepository.saveAndFlush(vehicle);
 		}

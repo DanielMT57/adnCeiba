@@ -1,7 +1,5 @@
 package co.com.ceiba.parqueadero.util;
 
-import java.util.regex.Pattern;
-
 import co.com.ceiba.parqueadero.exception.ParkingException;
 
 public class Validation {
@@ -11,7 +9,7 @@ public class Validation {
 	}
 
 	public static void checkNullOrEmpty(String data, String paramName) throws ParkingException {
-		if (data == null || data.equals("")) {
+		if (data == null || "".equals(data)) {
 			throw new ParkingException("El par\u00E1metro " + paramName + "es nulo o vac\u00EDo");
 		}
 	}

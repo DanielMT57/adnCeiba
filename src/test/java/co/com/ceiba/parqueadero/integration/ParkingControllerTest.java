@@ -13,7 +13,7 @@ import co.com.ceiba.parqueadero.builder.VehicleDataBuilder;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ParkingControllerTest extends GeneralTest {
+public class ParkingControllerTest extends RequestExecutor {
 
 	public static final String URL_CREATE_PARKING = "/createParking";
 

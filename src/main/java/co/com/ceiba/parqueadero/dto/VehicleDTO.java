@@ -9,12 +9,14 @@ public class VehicleDTO implements Serializable {
 	private String licensePlate;
 	private Integer cylinderPower;
 	private Integer type;
+	private String typeName;
 
-	public VehicleDTO(String licensePlate, Integer cylinderPower, Integer type) {
+	public VehicleDTO(String licensePlate, Integer cylinderPower, Integer type, String typeName) {
 		super();
 		this.licensePlate = licensePlate;
 		this.cylinderPower = cylinderPower;
 		this.type = type;
+		this.typeName = typeName;
 	}
 
 	public VehicleDTO() {
@@ -43,6 +45,14 @@ public class VehicleDTO implements Serializable {
 
 	public void setCylinderPower(Integer cylinderPower) {
 		this.cylinderPower = cylinderPower;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 }

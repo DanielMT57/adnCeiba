@@ -102,4 +102,19 @@ public class ParkingControllerTest extends RequestExecutor {
             fail();
         }
     }
+
+    @Test
+    public void leaveParkingMotorcycleTest() {
+        VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_MOTORCYCLE_EX2)
+                .withCylinderPower(125).buildDTO();
+        try {
+            createParking(vehicleDTO);
+            MvcResult result = leaveParking(vehicleDTO);
+            JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
+            assertEquals(200, result.getResponse().getStatus());
+            assertEquals(BigDecimal.valueOf(motorcycleFareHour), BigDecimal.valueOf((int) resp.get("fare")));
+        } catch (Exception e) {
+            fail();
+        }
+    }
 }

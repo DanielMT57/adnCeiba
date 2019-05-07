@@ -124,26 +124,23 @@ public class ParkingServiceImpl implements IParkingService {
         return modelMapper.map(parking, ParkingDTO.class);
     }
 
-    private int calculateParkingFare(Parking parking, VehicleTypeEnum vehicleType) {
+    public int calculateParkingFare(Parking parking, VehicleTypeEnum vehicleType) {
         long totalHours = ChronoUnit.HOURS.between(parking.getInDatetime(), parking.getOutDatetime());
         int totalDays = 0;
-        if (totalHours > 24) {
-            totalHours = totalHours % 24;
+        if (totalHours >= 24) {
             totalDays = (int) (totalHours / 24);
+            totalHours = totalHours % 24;
         }
         if (totalHours > 8) {
             totalDays++;
         }
-        totalHours ++;
+        totalHours++;
         int totalFare = 0;
-        switch (vehicleType) {
-        case CAR:
+        if (vehicleType == VehicleTypeEnum.CAR) {
             totalFare = (int) ((totalHours * carFarePerHour) + (totalDays * carFarePerDay));
-            break;
-        case MOTORCYCLE:
+        } else {
             totalFare = (int) ((totalHours * motorcycleFarePerHour) + (totalDays * motorcycleFarePerDay)
                     + (parking.getVehicle().getCylinderPower() >= motorcycleOverFareCylinderPower ? motorcycleOverFare : 0));
-            break;
         }
         StringBuilder sb = new StringBuilder("days: ");
         sb.append(totalDays);

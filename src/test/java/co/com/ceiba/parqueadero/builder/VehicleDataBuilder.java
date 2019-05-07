@@ -11,10 +11,16 @@ public class VehicleDataBuilder {
     public static final String LICENSE_PLATE_CAR_EX2 = "MMM402";
 
     public static final String LICENSE_PLATE_MOTORCYCLE_EX = "WKL28P";
+    
+    public static final String LICENSE_PLATE_MOTORCYCLE_EX2 = "POR42M";
 
     public static final String MESSAGE_INVALID_LICENSE_PLATE = "La placa a\u00F1adida no es v\u00E1lida";
 
     public static final String MESSAGE_INVALID_DAY = "No puede ingresar porque no est\u00E1 en un d\u00EDa habil";
+
+    public static final String MESSAGE_NULL_LICENSE_PLATE = "El par\u00E1metro placa es nulo o vac\u00EDo";
+    
+    public static final String MESSAGE_NULL_CYLINDER_POWER = "El par\u00E1metro cilindraje es nulo";
 
     public static final String MESSAGE_INVALID_FULL_PARKING = "No hay espacio disponible para este veh\u00EDculo";
 

@@ -3,6 +3,7 @@ package co.com.ceiba.parqueadero.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,9 +24,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import co.com.ceiba.parqueadero.builder.VehicleDataBuilder;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
 import co.com.ceiba.parqueadero.exception.ParkingException;
+import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
 import co.com.ceiba.parqueadero.service.impl.ParkingServiceImpl;
+import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -42,6 +45,12 @@ public class ParkingServiceTest {
 
     @Value("${parking.maxSlotsAvailable.cars}")
     private int maxSlotsAvailableCars;
+
+    @Value("${parking.fare.car.day}")
+    private int carFareDay;
+
+    @Value("${parking.fare.car.hour}")
+    private int carFareHour;
 
     @Autowired
     @InjectMocks
@@ -60,6 +69,18 @@ public class ParkingServiceTest {
             fail();
         } catch (ParkingException ex) {
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_LICENSE_PLATE, ex.getMessage());
+        }
+    }
+
+    @Test
+    public void saveParkingNullCylinderPower() {
+        VehicleDTO vehicleDTO = new VehicleDTO();
+        vehicleDTO.setLicensePlate("SQL312");
+        try {
+            parkingService.createParking(vehicleDTO);
+            fail();
+        } catch (ParkingException ex) {
+            assertEquals(VehicleDataBuilder.MESSAGE_NULL_CYLINDER_POWER, ex.getMessage());
         }
     }
 
@@ -100,4 +121,25 @@ public class ParkingServiceTest {
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_VEHICLE_NOT_FOUND, ex.getMessage());
         }
     }
+
+    @Test
+    public void leaveParkingNullLicensePlate() {
+        VehicleDTO vehicleDTO = new VehicleDTO();
+        try {
+            parkingService.leaveParking(vehicleDTO);
+            fail();
+        } catch (ParkingException ex) {
+            assertEquals(VehicleDataBuilder.MESSAGE_NULL_LICENSE_PLATE, ex.getMessage());
+        }
+    }
+
+    @Test
+    public void leaveParkingCalculateDayFare() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrow = now.plusDays(1);
+        Parking parking = new Parking(1, now, tomorrow, "", BigDecimal.valueOf(0), null);
+        int totalFare = parkingService.calculateParkingFare(parking, VehicleTypeEnum.CAR);
+        assertEquals(carFareDay + carFareHour, totalFare);
+    }
+
 }

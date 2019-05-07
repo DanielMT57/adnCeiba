@@ -16,83 +16,93 @@ import javax.persistence.Table;
 @Table(name = "parkings")
 public class Parking {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id")
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private Integer id;
 
-	@Column(name = "in_datetime", nullable = false)
-	private LocalDateTime inDatetime;
+    @Column(name = "in_datetime", nullable = false)
+    private LocalDateTime inDatetime;
 
-	@Column(name = "out_datetime")
-	private LocalDateTime outDatetime;
+    @Column(name = "out_datetime")
+    private LocalDateTime outDatetime;
 
-	@Column(name = "total_time")
-	private String totalTime;
+    @Column(name = "total_time")
+    private String totalTime;
 
-	@Column(name = "fare")
-	private BigDecimal fare;
+    @Column(name = "fare")
+    private BigDecimal fare;
 
-	@ManyToOne
-	@JoinColumn(name = "license_plate")
-	private Vehicle vehicle;
+    @ManyToOne
+    @JoinColumn(name = "license_plate")
+    private Vehicle vehicle;
 
-	public Parking() {
-		super();
-	}
+    public Parking() {
+        super();
+    }
 
-	public Parking(LocalDateTime inDatetime, Vehicle vehicle) {
-		super();
-		this.inDatetime = inDatetime;
-		this.vehicle = vehicle;
-	}
+    public Parking(LocalDateTime inDatetime, Vehicle vehicle) {
+        super();
+        this.inDatetime = inDatetime;
+        this.vehicle = vehicle;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Parking(Integer id, LocalDateTime inDatetime, LocalDateTime outDatetime, String totalTime, BigDecimal fare, Vehicle vehicle) {
+        super();
+        this.id = id;
+        this.inDatetime = inDatetime;
+        this.outDatetime = outDatetime;
+        this.totalTime = totalTime;
+        this.fare = fare;
+        this.vehicle = vehicle;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public LocalDateTime getInDatetime() {
-		return inDatetime;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setInDatetime(LocalDateTime inDatetime) {
-		this.inDatetime = inDatetime;
-	}
+    public LocalDateTime getInDatetime() {
+        return inDatetime;
+    }
 
-	public LocalDateTime getOutDatetime() {
-		return outDatetime;
-	}
+    public void setInDatetime(LocalDateTime inDatetime) {
+        this.inDatetime = inDatetime;
+    }
 
-	public void setOutDatetime(LocalDateTime outDatetime) {
-		this.outDatetime = outDatetime;
-	}
+    public LocalDateTime getOutDatetime() {
+        return outDatetime;
+    }
 
-	public String getTotalTime() {
-		return totalTime;
-	}
+    public void setOutDatetime(LocalDateTime outDatetime) {
+        this.outDatetime = outDatetime;
+    }
 
-	public void setTotalTime(String totalTime) {
-		this.totalTime = totalTime;
-	}
+    public String getTotalTime() {
+        return totalTime;
+    }
 
-	public BigDecimal getFare() {
-		return fare;
-	}
+    public void setTotalTime(String totalTime) {
+        this.totalTime = totalTime;
+    }
 
-	public void setFare(BigDecimal fare) {
-		this.fare = fare;
-	}
+    public BigDecimal getFare() {
+        return fare;
+    }
 
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
+    public void setFare(BigDecimal fare) {
+        this.fare = fare;
+    }
 
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
-	}
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 
 }

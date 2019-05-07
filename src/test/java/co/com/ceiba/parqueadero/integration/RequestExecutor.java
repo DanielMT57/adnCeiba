@@ -15,15 +15,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 public class RequestExecutor {
 
-	@Autowired
-	MockMvc mockMvc;
+    @Autowired
+    MockMvc mockMvc;
 
-	private static final String BASE_URL = "http://localhost:8080/parking";
+    private static final String BASE_URL = "/parking";
 
-	public MvcResult makePOSTRequest(String serviceUri, Object body) throws Exception {
-		RequestBuilder builder = MockMvcRequestBuilders.post(BASE_URL + serviceUri)
-				.contentType(MediaType.APPLICATION_JSON_UTF8).content(new ObjectMapper().writeValueAsString(body));
+    public MvcResult makePOSTRequest(String serviceUri, Object body) throws Exception {
+        RequestBuilder builder = MockMvcRequestBuilders.post(BASE_URL + serviceUri).contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(body));
 
-		return mockMvc.perform(builder).andReturn();
-	}
+        return mockMvc.perform(builder).andReturn();
+    }
+
+    public MvcResult makePUTRequest(String serviceUri, Object body) throws Exception {
+        RequestBuilder builder = MockMvcRequestBuilders.put(BASE_URL + serviceUri).contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(body));
+
+        return mockMvc.perform(builder).andReturn();
+    }
 }

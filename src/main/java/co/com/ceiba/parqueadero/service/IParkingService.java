@@ -7,4 +7,6 @@ import co.com.ceiba.parqueadero.exception.ParkingException;
 public interface IParkingService {
 
 	ParkingDTO createParking(VehicleDTO vehicleDTO) throws ParkingException;
+
+	ParkingDTO leaveParking(VehicleDTO vehicleDTO) throws ParkingException;
 }

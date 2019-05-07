@@ -10,13 +10,13 @@ public final class Validation {
 
 	public static void checkNullOrEmpty(String data, String paramName) throws ParkingException {
 		if (data == null || "".equals(data)) {
-			throw new ParkingException("El par\u00E1metro " + paramName + "es nulo o vac\u00EDo");
+			throw new ParkingException("El par\u00E1metro " + paramName + " es nulo o vac\u00EDo");
 		}
 	}
 
 	public static void checkNull(Object obj, String paramName) throws ParkingException {
 		if (obj == null) {
-			throw new ParkingException("El par\u00E1metro " + paramName + "es nulo");
+			throw new ParkingException("El par\u00E1metro " + paramName + " es nulo");
 		}
 	}
 }

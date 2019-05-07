@@ -134,6 +134,17 @@ public class ParkingServiceTest {
     }
 
     @Test
+    public void leaveParkingEmptyLicensePlate() {
+        VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate("").buildDTO();
+        try {
+            parkingService.leaveParking(vehicleDTO);
+            fail();
+        } catch (ParkingException ex) {
+            assertEquals(VehicleDataBuilder.MESSAGE_NULL_LICENSE_PLATE, ex.getMessage());
+        }
+    }
+
+    @Test
     public void leaveParkingCalculateDayFare() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tomorrow = now.plusDays(1);
@@ -141,7 +152,7 @@ public class ParkingServiceTest {
         int totalFare = parkingService.calculateParkingFare(parking, VehicleTypeEnum.CAR);
         assertEquals(carFareDay + carFareHour, totalFare);
     }
-    
+
     @Test
     public void leaveParkingCalculateNineHoursFare() {
         LocalDateTime now = LocalDateTime.now();

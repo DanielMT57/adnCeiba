@@ -141,5 +141,14 @@ public class ParkingServiceTest {
         int totalFare = parkingService.calculateParkingFare(parking, VehicleTypeEnum.CAR);
         assertEquals(carFareDay + carFareHour, totalFare);
     }
+    
+    @Test
+    public void leaveParkingCalculateNineHoursFare() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrow = now.plusHours(9);
+        Parking parking = new Parking(1, now, tomorrow, "", BigDecimal.valueOf(0), null);
+        int totalFare = parkingService.calculateParkingFare(parking, VehicleTypeEnum.CAR);
+        assertEquals(carFareHour * 9, totalFare);
+    }
 
 }

@@ -135,6 +135,7 @@ public class ParkingServiceImpl implements IParkingService {
         }
         if (totalHours > 8) {
             totalDays++;
+            totalHours = 0;
         }
         totalHours++;
         int totalFare = 0;

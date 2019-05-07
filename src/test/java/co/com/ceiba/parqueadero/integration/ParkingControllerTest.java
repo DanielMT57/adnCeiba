@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,8 @@ public class ParkingControllerTest extends RequestExecutor {
     public static final String URL_CREATE_PARKING = "/createParking";
 
     public static final String URL_LEAVE_PARKING = "/leaveParking";
+
+    public static final String URL_GET_VEHICLES = "/getVehicles";
 
     @Value("${parking.fare.motorcycle.hour}")
     private int motorcycleFareHour;
@@ -45,7 +48,7 @@ public class ParkingControllerTest extends RequestExecutor {
             MvcResult result = createParking(vehicleDTO);
             assertEquals(200, result.getResponse().getStatus());
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -115,6 +118,21 @@ public class ParkingControllerTest extends RequestExecutor {
             assertEquals(BigDecimal.valueOf(motorcycleFareHour), BigDecimal.valueOf((int) resp.get("fare")));
         } catch (Exception e) {
             fail();
+        }
+    }
+
+    @Test
+    public void getVehiclesTest() {
+        VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_MOTORCYCLE_EX3)
+                .withCylinderPower(125).buildDTO();
+        try {
+            createParking(vehicleDTO);
+            MvcResult result = makeGETRequest(URL_GET_VEHICLES);
+            JSONArray resp = new JSONArray(result.getResponse().getContentAsString());
+            assertEquals(200, result.getResponse().getStatus());
+            assertEquals(Boolean.TRUE, resp.length() > 0);
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
     }
 }

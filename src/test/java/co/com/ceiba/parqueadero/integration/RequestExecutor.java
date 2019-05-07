@@ -33,4 +33,10 @@ public class RequestExecutor {
 
         return mockMvc.perform(builder).andReturn();
     }
+
+    public MvcResult makeGETRequest(String serviceUri) throws Exception {
+        RequestBuilder builder = MockMvcRequestBuilders.get(BASE_URL + serviceUri).contentType(MediaType.APPLICATION_JSON_UTF8);
+        return mockMvc.perform(builder).andReturn();
+    }
+
 }

@@ -102,7 +102,7 @@ public class ParkingServiceTest {
     @Test
     public void saveParkingAlreadyFullTest() {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().buildDTO();
-        Mockito.when(parkingRepository.countParkedVehiclesByType(Mockito.anyInt())).thenReturn(maxSlotsAvailableCars);
+        Mockito.when(parkingRepository.countParkedVehiclesByType(Mockito.anyString())).thenReturn(maxSlotsAvailableCars);
         try {
             parkingService.createParking(vehicleDTO);
             fail();

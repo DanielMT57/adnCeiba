@@ -21,13 +21,13 @@ public class Vehicle implements Serializable {
 	private Integer cylinderPower;
 
 	@Column(name = "type", nullable = false)
-	private Integer type;
+	private String type;
 
 	public Vehicle() {
 		super();
 	}
 
-	public Vehicle(String licensePlate, Integer cylinderPower, Integer type) {
+	public Vehicle(String licensePlate, Integer cylinderPower, String type) {
 		super();
 		this.licensePlate = licensePlate;
 		this.cylinderPower = cylinderPower;
@@ -50,11 +50,11 @@ public class Vehicle implements Serializable {
 		this.cylinderPower = cylinderPower;
 	}
 
-	public Integer getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

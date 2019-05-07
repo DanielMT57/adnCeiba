@@ -11,15 +11,17 @@ public class VehicleDataBuilder {
     public static final String LICENSE_PLATE_CAR_EX2 = "MMM402";
 
     public static final String LICENSE_PLATE_MOTORCYCLE_EX = "WKL28P";
-    
+
     public static final String LICENSE_PLATE_MOTORCYCLE_EX2 = "POR42M";
+    
+    public static final String LICENSE_PLATE_MOTORCYCLE_EX3 = "XMA42W";
 
     public static final String MESSAGE_INVALID_LICENSE_PLATE = "La placa a\u00F1adida no es v\u00E1lida";
 
     public static final String MESSAGE_INVALID_DAY = "No puede ingresar porque no est\u00E1 en un d\u00EDa habil";
 
     public static final String MESSAGE_NULL_LICENSE_PLATE = "El par\u00E1metro placa es nulo o vac\u00EDo";
-    
+
     public static final String MESSAGE_NULL_CYLINDER_POWER = "El par\u00E1metro cilindraje es nulo";
 
     public static final String MESSAGE_INVALID_FULL_PARKING = "No hay espacio disponible para este veh\u00EDculo";
@@ -28,13 +30,13 @@ public class VehicleDataBuilder {
 
     private String licensePlate;
     private Integer cylinderPower;
-    private Integer type;
+    private String type;
 
     public VehicleDataBuilder() {
         super();
         this.licensePlate = LICENSE_PLATE_CAR_EX;
         this.cylinderPower = 1400;
-        this.type = VehicleTypeEnum.CAR.getVehicleType();
+        this.type = VehicleTypeEnum.CAR.getVehicleTypeName();
     }
 
     public VehicleDataBuilder withLicensePlate(String licensePlate) {
@@ -48,7 +50,7 @@ public class VehicleDataBuilder {
     }
 
     public VehicleDTO buildDTO() {
-        return new VehicleDTO(this.licensePlate, this.cylinderPower, this.type, "");
+        return new VehicleDTO(this.licensePlate, this.cylinderPower, this.type);
     }
 
     public Vehicle buildEntity() {

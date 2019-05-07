@@ -5,12 +5,14 @@ import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import co.com.ceiba.parqueadero.dto.ParkedVehicleDTO;
 import co.com.ceiba.parqueadero.dto.ParkingDTO;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
 import co.com.ceiba.parqueadero.exception.ParkingException;
@@ -88,7 +90,7 @@ public class ParkingServiceImpl implements IParkingService {
         }
 
         short slotsAvailable = vehicleType.equals(VehicleTypeEnum.CAR) ? maxSlotsAvailableCars : maxSlotsAvailableMotorcycles;
-        if (parkingRepository.countParkedVehiclesByType(vehicleType.getVehicleType()) >= slotsAvailable) {
+        if (parkingRepository.countParkedVehiclesByType(vehicleType.getVehicleTypeName()) >= slotsAvailable) {
             throw new ParkingException("No hay espacio disponible para este veh\u00EDculo");
         }
 
@@ -101,7 +103,7 @@ public class ParkingServiceImpl implements IParkingService {
     public Vehicle getVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
         Vehicle vehicle = vehicleRepository.findByPlate(vehicleDTO.getLicensePlate());
         if (null == vehicle) {
-            vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(), vehicleType.getVehicleType());
+            vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(), vehicleType.getVehicleTypeName());
             vehicle = vehicleRepository.saveAndFlush(vehicle);
         }
         return vehicle;
@@ -148,6 +150,11 @@ public class ParkingServiceImpl implements IParkingService {
         sb.append(totalHours);
         parking.setTotalTime(sb.toString());
         return totalFare;
+    }
+
+    @Override
+    public List<ParkedVehicleDTO> listAllVehicles() {
+        return parkingRepository.listAllCurrentParkedVehicles();
     }
 
 }

@@ -25,8 +25,11 @@ public class VehicleDataBuilder {
     public static final String MESSAGE_NULL_CYLINDER_POWER = "El par\u00E1metro cilindraje es nulo";
 
     public static final String MESSAGE_INVALID_FULL_PARKING = "No hay espacio disponible para este veh\u00EDculo";
+    
+    public static final String MESSAGE_ALREADY_PARKED = "Este veh\u00EDculo ya se encuentra parqueado";
 
     public static final String MESSAGE_INVALID_VEHICLE_NOT_FOUND = "Este veh\u00EDculo no se encuentra parqueado";
+    
 
     private String licensePlate;
     private Integer cylinderPower;

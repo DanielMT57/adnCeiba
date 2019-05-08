@@ -110,6 +110,18 @@ public class ParkingServiceTest {
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_FULL_PARKING, ex.getMessage());
         }
     }
+    
+    @Test
+    public void saveParkingAlreadyParkedVehicleTest() {
+        VehicleDTO vehicleDTO = new VehicleDataBuilder().buildDTO();
+        Mockito.when(parkingRepository.findVehicleByPlateAndStatusActive(Mockito.anyString())).thenReturn(new Parking());
+        try {
+            parkingService.createParking(vehicleDTO);
+            fail();
+        } catch (ParkingException ex) {
+            assertEquals(VehicleDataBuilder.MESSAGE_ALREADY_PARKED, ex.getMessage());
+        }
+    }
 
     @Test
     public void leaveParkingVehicleNotFoundTest() {

@@ -2,10 +2,13 @@ package co.com.ceiba.parqueadero.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ParkedVehicleDTO {
 
     private String licensePlate;
     private String vehicleType;
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm")
     private LocalDateTime checkinDate;
 
     public ParkedVehicleDTO() {

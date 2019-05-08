@@ -25,12 +25,12 @@ public class ParkingController {
     private ParkingService parkingService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<ParkingDTO> createParking(@RequestBody VehicleDTO vehicleDTO) {
+    public ResponseEntity<ParkingDTO> create(@RequestBody VehicleDTO vehicleDTO) {
         return ResponseEntity.ok(parkingService.createParking(vehicleDTO));
     }
 
     @PutMapping(value = "/leave")
-    public ResponseEntity<ParkingDTO> leaveParking(@RequestBody VehicleDTO vehicleDTO) {
+    public ResponseEntity<ParkingDTO> leave(@RequestBody VehicleDTO vehicleDTO) {
         return ResponseEntity.ok(parkingService.leaveParking(vehicleDTO));
     }
 

@@ -1,8 +1,8 @@
 package co.com.ceiba.parqueadero.builder;
 
+import co.com.ceiba.parqueadero.domain.VehicleTypeEnum;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
 import co.com.ceiba.parqueadero.model.Vehicle;
-import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 public class VehicleDataBuilder {
 

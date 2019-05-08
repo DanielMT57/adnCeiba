@@ -22,13 +22,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.com.ceiba.parqueadero.builder.VehicleDataBuilder;
+import co.com.ceiba.parqueadero.domain.VehicleTypeEnum;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
 import co.com.ceiba.parqueadero.exception.ParkingException;
 import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
 import co.com.ceiba.parqueadero.service.ParkingService;
-import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

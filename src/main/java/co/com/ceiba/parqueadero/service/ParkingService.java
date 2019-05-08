@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import co.com.ceiba.parqueadero.domain.VehicleTypeEnum;
 import co.com.ceiba.parqueadero.dto.ParkedVehicleDTO;
 import co.com.ceiba.parqueadero.dto.ParkingDTO;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
@@ -21,7 +22,6 @@ import co.com.ceiba.parqueadero.model.Vehicle;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
 import co.com.ceiba.parqueadero.util.Validation;
-import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 @Component
 public class ParkingService {

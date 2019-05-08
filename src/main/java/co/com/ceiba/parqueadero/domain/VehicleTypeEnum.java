@@ -1,4 +1,4 @@
-package co.com.ceiba.parqueadero.util;
+package co.com.ceiba.parqueadero.domain;
 
 import java.util.regex.Pattern;
 

@@ -27,7 +27,7 @@ import co.com.ceiba.parqueadero.exception.ParkingException;
 import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
-import co.com.ceiba.parqueadero.service.impl.ParkingServiceImpl;
+import co.com.ceiba.parqueadero.service.ParkingService;
 import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +54,7 @@ public class ParkingServiceTest {
 
     @Autowired
     @InjectMocks
-    ParkingServiceImpl parkingService;
+    ParkingService parkingService;
 
     @Before
     public void setup() {
@@ -110,7 +110,7 @@ public class ParkingServiceTest {
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_FULL_PARKING, ex.getMessage());
         }
     }
-    
+
     @Test
     public void saveParkingAlreadyParkedVehicleTest() {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().buildDTO();

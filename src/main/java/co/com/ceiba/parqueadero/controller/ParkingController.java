@@ -1,7 +1,8 @@
 package co.com.ceiba.parqueadero.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,38 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.com.ceiba.parqueadero.dto.ErrorDTO;
+import co.com.ceiba.parqueadero.dto.ParkedVehicleDTO;
+import co.com.ceiba.parqueadero.dto.ParkingDTO;
 import co.com.ceiba.parqueadero.dto.VehicleDTO;
-import co.com.ceiba.parqueadero.exception.ParkingException;
-import co.com.ceiba.parqueadero.service.IParkingService;
+import co.com.ceiba.parqueadero.service.ParkingService;
 
 @RestController
 @RequestMapping(path = "/parking", method = { RequestMethod.POST, RequestMethod.PUT })
 public class ParkingController {
 
     @Autowired
-    private IParkingService parkingService;
+    private ParkingService parkingService;
 
-    @PostMapping(value = "/createParking")
-    public ResponseEntity<Object> createParking(@RequestBody VehicleDTO vehicleDTO) {
-        try {
-            return ResponseEntity.ok(parkingService.createParking(vehicleDTO));
-        } catch (ParkingException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(ex));
-        }
+    @PostMapping(value = "/create")
+    public ResponseEntity<ParkingDTO> createParking(@RequestBody VehicleDTO vehicleDTO) {
+        return ResponseEntity.ok(parkingService.createParking(vehicleDTO));
     }
 
-    @PutMapping(value = "/leaveParking")
-    public ResponseEntity<Object> leaveParking(@RequestBody VehicleDTO vehicleDTO) {
-        try {
-            return ResponseEntity.ok(parkingService.leaveParking(vehicleDTO));
-        } catch (ParkingException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(ex));
-        }
+    @PutMapping(value = "/leave")
+    public ResponseEntity<ParkingDTO> leaveParking(@RequestBody VehicleDTO vehicleDTO) {
+        return ResponseEntity.ok(parkingService.leaveParking(vehicleDTO));
     }
 
     @GetMapping(value = "/getVehicles")
-    public ResponseEntity<Object> getVehicles() {
+    public ResponseEntity<List<ParkedVehicleDTO>> getVehicles() {
         return ResponseEntity.ok(parkingService.listAllVehicles());
     }
 }

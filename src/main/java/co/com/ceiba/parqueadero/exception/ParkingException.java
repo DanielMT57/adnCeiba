@@ -1,10 +1,10 @@
 package co.com.ceiba.parqueadero.exception;
 
-public class ParkingException extends Exception {
+public class ParkingException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ParkingException(String message) {
-		super(message);
-	}
+    public ParkingException(String message) {
+        super(message);
+    }
 }

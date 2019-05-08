@@ -1,4 +1,4 @@
-package co.com.ceiba.parqueadero.service.impl;
+package co.com.ceiba.parqueadero.service;
 
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -20,12 +20,11 @@ import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.model.Vehicle;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
-import co.com.ceiba.parqueadero.service.IParkingService;
 import co.com.ceiba.parqueadero.util.Validation;
 import co.com.ceiba.parqueadero.util.VehicleTypeEnum;
 
 @Component
-public class ParkingServiceImpl implements IParkingService {
+public class ParkingService {
 
     private Clock clock;
 
@@ -62,25 +61,22 @@ public class ParkingServiceImpl implements IParkingService {
     @Value("${parking.fare.motorcycle.overfaceCylinderPower}")
     private int motorcycleOverFareCylinderPower;
 
-    @Override
-    public ParkingDTO createParking(VehicleDTO vehicleDTO) throws ParkingException {
-        String licensePlate = vehicleDTO.getLicensePlate();
-        // parameter validation
-        Validation.checkNullOrEmpty(licensePlate, "placa");
-        vehicleDTO.setLicensePlate(licensePlate.toUpperCase());
-        Validation.checkNull(vehicleDTO.getCylinderPower(), "cilindraje");
-        VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(licensePlate);
+    public ParkingDTO createParking(VehicleDTO vehicleDTO) {
         clock = Clock.systemUTC();
         LocalDateTime inDatetime = LocalDateTime.now(clock);
-        validateVehicleToCheckIn(vehicleType, licensePlate, inDatetime);
+        VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(vehicleDTO.getLicensePlate());
+        validateVehicleToCheckIn(vehicleDTO, vehicleType, inDatetime);
         Vehicle vehicle = getVehicle(vehicleDTO, vehicleType);
         Parking parking = new Parking(inDatetime, vehicle);
         parking = parkingRepository.save(parking);
         return modelMapper.map(parking, ParkingDTO.class);
     }
 
-    public void validateVehicleToCheckIn(VehicleTypeEnum vehicleType, String licensePlate, LocalDateTime inDatetime)
-            throws ParkingException {
+    public void validateVehicleToCheckIn(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType, LocalDateTime inDatetime) {
+        String licensePlate = vehicleDTO.getLicensePlate();
+        // parameter validation
+        Validation.checkNullOrEmpty(licensePlate, "placa");
+        Validation.checkNull(vehicleDTO.getCylinderPower(), "cilindraje");
         if (null == vehicleType) {
             throw new ParkingException("La placa a\u00F1adida no es v\u00E1lida");
         }
@@ -109,8 +105,7 @@ public class ParkingServiceImpl implements IParkingService {
         return vehicle;
     }
 
-    @Override
-    public ParkingDTO leaveParking(VehicleDTO vehicleDTO) throws ParkingException {
+    public ParkingDTO leaveParking(VehicleDTO vehicleDTO) {
         String licensePlate = vehicleDTO.getLicensePlate();
         Validation.checkNullOrEmpty(licensePlate, "placa");
         vehicleDTO.setLicensePlate(licensePlate.toUpperCase());
@@ -145,15 +140,14 @@ public class ParkingServiceImpl implements IParkingService {
             totalFare = (int) ((totalHours * motorcycleFarePerHour) + (totalDays * motorcycleFarePerDay)
                     + (parking.getVehicle().getCylinderPower() >= motorcycleOverFareCylinderPower ? motorcycleOverFare : 0));
         }
-        StringBuilder sb = new StringBuilder("days: ");
-        sb.append(totalDays);
-        sb.append(", hours: ");
-        sb.append(totalHours);
-        parking.setTotalTime(sb.toString());
+        StringBuilder totalTime = new StringBuilder("days: ");
+        totalTime.append(totalDays);
+        totalTime.append(", hours: ");
+        totalTime.append(totalHours);
+        parking.setTotalTime(totalTime.toString());
         return totalFare;
     }
 
-    @Override
     public List<ParkedVehicleDTO> listAllVehicles() {
         return parkingRepository.listAllCurrentParkedVehicles();
     }

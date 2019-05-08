@@ -21,9 +21,9 @@ import co.com.ceiba.parqueadero.dto.VehicleDTO;
 @WebAppConfiguration
 public class ParkingControllerTest extends RequestExecutor {
 
-    public static final String URL_CREATE_PARKING = "/createParking";
+    public static final String URL_CREATE_PARKING = "/create";
 
-    public static final String URL_LEAVE_PARKING = "/leaveParking";
+    public static final String URL_LEAVE_PARKING = "/leave";
 
     public static final String URL_GET_VEHICLES = "/getVehicles";
 
@@ -58,7 +58,7 @@ public class ParkingControllerTest extends RequestExecutor {
         MvcResult result = null;
         try {
             result = createParking(vehicleDTO);
-            assertEquals(500, result.getResponse().getStatus());
+            assertEquals(400, result.getResponse().getStatus());
             JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_LICENSE_PLATE, resp.get("message"));
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class ParkingControllerTest extends RequestExecutor {
             MvcResult result = leaveParking(vehicleDTO);
             assertEquals(200, result.getResponse().getStatus());
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -83,11 +83,11 @@ public class ParkingControllerTest extends RequestExecutor {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_CAR_EX2).buildDTO();
         try {
             MvcResult result = leaveParking(vehicleDTO);
-            assertEquals(500, result.getResponse().getStatus());
+            assertEquals(400, result.getResponse().getStatus());
             JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
             assertEquals(VehicleDataBuilder.MESSAGE_INVALID_VEHICLE_NOT_FOUND, resp.get("message"));
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ public class ParkingControllerTest extends RequestExecutor {
             assertEquals(200, result.getResponse().getStatus());
             assertEquals(BigDecimal.valueOf(motorcycleFareHour + motorcycleOverFare), BigDecimal.valueOf((int) resp.get("fare")));
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -117,7 +117,7 @@ public class ParkingControllerTest extends RequestExecutor {
             assertEquals(200, result.getResponse().getStatus());
             assertEquals(BigDecimal.valueOf(motorcycleFareHour), BigDecimal.valueOf((int) resp.get("fare")));
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 

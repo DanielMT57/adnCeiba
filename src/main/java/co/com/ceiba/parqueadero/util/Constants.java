@@ -1,6 +1,6 @@
 package co.com.ceiba.parqueadero.util;
 
-public class Constants {
+public final class Constants {
 
     public static final String ERROR_INVALID_LICENSE_PLATE = "La placa a\u00F1adida no es v\u00E1lida";
     

@@ -27,6 +27,8 @@ public class ParkingControllerTest extends RequestExecutor {
 
     public static final String URL_GET_VEHICLES = "/getVehicles";
 
+    public static final String URL_GET_TRM = "/getTRM";
+
     @Value("${parking.fare.motorcycle.hour}")
     private int motorcycleFareHour;
 
@@ -131,6 +133,16 @@ public class ParkingControllerTest extends RequestExecutor {
             JSONArray resp = new JSONArray(result.getResponse().getContentAsString());
             assertEquals(200, result.getResponse().getStatus());
             assertEquals(Boolean.TRUE, resp.length() > 0);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void getTRMTest() {
+        try {
+            MvcResult result = makeGETRequest(URL_GET_TRM);
+            assertEquals(200, result.getResponse().getStatus());
         } catch (Exception e) {
             fail(e.getMessage());
         }

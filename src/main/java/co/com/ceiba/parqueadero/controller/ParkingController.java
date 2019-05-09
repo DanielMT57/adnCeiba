@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +20,7 @@ import co.com.ceiba.parqueadero.service.ParkingService;
 
 @RestController
 @RequestMapping(path = "/parking", method = { RequestMethod.POST, RequestMethod.PUT })
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class ParkingController {
 
     @Autowired
@@ -37,5 +39,10 @@ public class ParkingController {
     @GetMapping(value = "/getVehicles")
     public ResponseEntity<List<ParkedVehicleDTO>> getVehicles() {
         return ResponseEntity.ok(parkingService.listAllVehicles());
+    }
+    
+    @GetMapping(value = "/getTRM")
+    public ResponseEntity<String> getTRM(){
+        return ResponseEntity.ok(parkingService.getTRM());
     }
 }

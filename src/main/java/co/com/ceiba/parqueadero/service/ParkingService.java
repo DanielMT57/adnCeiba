@@ -10,7 +10,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import co.com.ceiba.parqueadero.domain.VehicleTypeEnum;
 import co.com.ceiba.parqueadero.dto.ParkedVehicleDTO;
@@ -21,6 +23,7 @@ import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.model.Vehicle;
 import co.com.ceiba.parqueadero.repository.ParkingRepository;
 import co.com.ceiba.parqueadero.repository.VehicleRepository;
+import co.com.ceiba.parqueadero.util.Constants;
 import co.com.ceiba.parqueadero.util.Validation;
 
 @Component
@@ -61,6 +64,9 @@ public class ParkingService {
     @Value("${parking.fare.motorcycle.overfaceCylinderPower}")
     private int motorcycleOverFareCylinderPower;
 
+    @Value("${parking.trm.url}")
+    private String trmServiceUrl;
+
     public ParkingDTO createParking(VehicleDTO vehicleDTO) {
         clock = Clock.systemUTC();
         LocalDateTime inDatetime = LocalDateTime.now(clock);
@@ -78,21 +84,21 @@ public class ParkingService {
         Validation.checkNullOrEmpty(licensePlate, "placa");
         Validation.checkNull(vehicleDTO.getCylinderPower(), "cilindraje");
         if (null == vehicleType) {
-            throw new ParkingException("La placa a\u00F1adida no es v\u00E1lida");
+            throw new ParkingException(Constants.ERROR_INVALID_LICENSE_PLATE);
         }
 
         if (parkingRepository.findVehicleByPlateAndStatusActive(licensePlate) != null) {
-            throw new ParkingException("Este veh\u00EDculo ya se encuentra parqueado");
+            throw new ParkingException(Constants.ERROR_VEHICLE_ALREADY_PARKED);
         }
 
         short slotsAvailable = vehicleType.equals(VehicleTypeEnum.CAR) ? maxSlotsAvailableCars : maxSlotsAvailableMotorcycles;
         if (parkingRepository.countParkedVehiclesByType(vehicleType.getVehicleTypeName()) >= slotsAvailable) {
-            throw new ParkingException("No hay espacio disponible para este veh\u00EDculo");
+            throw new ParkingException(Constants.ERROR_NO_SPACE_AVAILABLE);
         }
 
         if (licensePlate.startsWith("A")
                 && (!inDatetime.getDayOfWeek().equals(DayOfWeek.SUNDAY) || !inDatetime.getDayOfWeek().equals(DayOfWeek.MONDAY))) {
-            throw new ParkingException("No puede ingresar porque no est\u00E1 en un d\u00EDa habil");
+            throw new ParkingException(Constants.ERROR_INVALID_DAY);
         }
     }
 
@@ -111,7 +117,7 @@ public class ParkingService {
         vehicleDTO.setLicensePlate(licensePlate.toUpperCase());
         Parking parking = parkingRepository.findVehicleByPlateAndStatusActive(vehicleDTO.getLicensePlate());
         if (parking == null) {
-            throw new ParkingException("Este veh\u00EDculo no se encuentra parqueado");
+            throw new ParkingException(Constants.ERROR_VEHICLE_NOT_PARKED);
         }
         VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(licensePlate);
         clock = Clock.systemUTC();
@@ -150,6 +156,12 @@ public class ParkingService {
 
     public List<ParkedVehicleDTO> listAllVehicles() {
         return parkingRepository.listAllCurrentParkedVehicles();
+    }
+
+    public String getTRM() {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(trmServiceUrl, String.class);
+        return response.getBody();
     }
 
 }

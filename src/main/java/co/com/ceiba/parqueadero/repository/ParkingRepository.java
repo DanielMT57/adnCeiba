@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import co.com.ceiba.parqueadero.dto.ParkedVehicleDTO;
 import co.com.ceiba.parqueadero.model.Parking;
+import co.com.ceiba.parqueadero.persistence.IParkingPersistence;
 
 @Repository
-public interface ParkingRepository extends JpaRepository<Parking, Integer> {
+public interface ParkingRepository extends IParkingPersistence, JpaRepository<Parking, Integer> {
 
     @Query("SELECT count(p) FROM Parking p WHERE p.outDatetime IS NULL AND p.vehicle.type = ?1")
     Integer countParkedVehiclesByType(String vehicleType);

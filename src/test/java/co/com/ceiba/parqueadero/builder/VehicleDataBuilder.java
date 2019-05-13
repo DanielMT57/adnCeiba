@@ -15,6 +15,8 @@ public class VehicleDataBuilder {
     public static final String LICENSE_PLATE_MOTORCYCLE_EX2 = "POR42M";
     
     public static final String LICENSE_PLATE_MOTORCYCLE_EX3 = "XMA42W";
+    
+    public static final String LICENSE_PLATE_MOTORCYCLE_EX4 = "WWO97C";
 
     public static final String MESSAGE_INVALID_LICENSE_PLATE = "La placa a\u00F1adida no es v\u00E1lida";
 

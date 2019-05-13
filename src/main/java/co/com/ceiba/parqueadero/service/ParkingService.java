@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +20,10 @@ import co.com.ceiba.parqueadero.dto.VehicleDTO;
 import co.com.ceiba.parqueadero.exception.ParkingException;
 import co.com.ceiba.parqueadero.model.Parking;
 import co.com.ceiba.parqueadero.model.Vehicle;
-import co.com.ceiba.parqueadero.repository.ParkingRepository;
-import co.com.ceiba.parqueadero.repository.VehicleRepository;
+import co.com.ceiba.parqueadero.persistence.IParkingPersistence;
+import co.com.ceiba.parqueadero.persistence.IVehiclePersistence;
 import co.com.ceiba.parqueadero.util.Constants;
+import co.com.ceiba.parqueadero.util.Mapper;
 import co.com.ceiba.parqueadero.util.Validation;
 
 @Component
@@ -32,13 +32,13 @@ public class ParkingService {
     private Clock clock;
 
     @Autowired
-    private ParkingRepository parkingRepository;
+    private IParkingPersistence parkingPersistence;
 
     @Autowired
-    private VehicleRepository vehicleRepository;
-
+    private IVehiclePersistence vehiclePersistence;
+    
     @Autowired
-    private ModelMapper modelMapper;
+    private Mapper mapper;
 
     @Value("${parking.maxSlotsAvailable.cars}")
     private short maxSlotsAvailableCars;
@@ -72,10 +72,9 @@ public class ParkingService {
         LocalDateTime inDatetime = LocalDateTime.now(clock);
         VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(vehicleDTO.getLicensePlate());
         validateVehicleToCheckIn(vehicleDTO, vehicleType, inDatetime);
-        Vehicle vehicle = getVehicle(vehicleDTO, vehicleType);
-        Parking parking = new Parking(inDatetime, vehicle);
-        parking = parkingRepository.save(parking);
-        return modelMapper.map(parking, ParkingDTO.class);
+        Parking parking = new Parking(inDatetime, getVehicle(vehicleDTO, vehicleType));
+        parking = parkingPersistence.save(parking);
+        return mapper.map(parking, ParkingDTO.class);
     }
 
     public void validateVehicleToCheckIn(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType, LocalDateTime inDatetime) {
@@ -87,12 +86,12 @@ public class ParkingService {
             throw new ParkingException(Constants.ERROR_INVALID_LICENSE_PLATE);
         }
 
-        if (parkingRepository.findVehicleByPlateAndStatusActive(licensePlate) != null) {
+        if (parkingPersistence.findVehicleByPlateAndStatusActive(licensePlate) != null) {
             throw new ParkingException(Constants.ERROR_VEHICLE_ALREADY_PARKED);
         }
 
         short slotsAvailable = vehicleType.equals(VehicleTypeEnum.CAR) ? maxSlotsAvailableCars : maxSlotsAvailableMotorcycles;
-        if (parkingRepository.countParkedVehiclesByType(vehicleType.getVehicleTypeName()) >= slotsAvailable) {
+        if (parkingPersistence.countParkedVehiclesByType(vehicleType.getVehicleTypeName()) >= slotsAvailable) {
             throw new ParkingException(Constants.ERROR_NO_SPACE_AVAILABLE);
         }
 
@@ -103,10 +102,10 @@ public class ParkingService {
     }
 
     public Vehicle getVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
-        Vehicle vehicle = vehicleRepository.findByPlate(vehicleDTO.getLicensePlate());
+        Vehicle vehicle = vehiclePersistence.findByPlate(vehicleDTO.getLicensePlate());
         if (null == vehicle) {
             vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(), vehicleType.getVehicleTypeName());
-            vehicle = vehicleRepository.saveAndFlush(vehicle);
+            vehicle = vehiclePersistence.saveAndFlush(vehicle);
         }
         return vehicle;
     }
@@ -115,7 +114,7 @@ public class ParkingService {
         String licensePlate = vehicleDTO.getLicensePlate();
         Validation.checkNullOrEmpty(licensePlate, "placa");
         vehicleDTO.setLicensePlate(licensePlate.toUpperCase());
-        Parking parking = parkingRepository.findVehicleByPlateAndStatusActive(vehicleDTO.getLicensePlate());
+        Parking parking = parkingPersistence.findVehicleByPlateAndStatusActive(vehicleDTO.getLicensePlate());
         if (parking == null) {
             throw new ParkingException(Constants.ERROR_VEHICLE_NOT_PARKED);
         }
@@ -123,8 +122,8 @@ public class ParkingService {
         clock = Clock.systemUTC();
         parking.setOutDatetime(LocalDateTime.now(clock));
         parking.setFare(BigDecimal.valueOf(calculateParkingFare(parking, vehicleType)));
-        parking = parkingRepository.save(parking);
-        return modelMapper.map(parking, ParkingDTO.class);
+        parking = parkingPersistence.save(parking);
+        return mapper.map(parking, ParkingDTO.class);
     }
 
     public int calculateParkingFare(Parking parking, VehicleTypeEnum vehicleType) {
@@ -155,7 +154,7 @@ public class ParkingService {
     }
 
     public List<ParkedVehicleDTO> listAllVehicles() {
-        return parkingRepository.listAllCurrentParkedVehicles();
+        return parkingPersistence.listAllCurrentParkedVehicles();
     }
 
     public String getTRM() {

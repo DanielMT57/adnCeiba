@@ -69,73 +69,53 @@ public class ParkingControllerTest extends RequestExecutor {
     }
 
     @Test
-    public void leaveParkingTest() {
+    public void leaveParkingTest() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_CAR_EX2).buildDTO();
-        try {
-            createParking(vehicleDTO);
-            MvcResult result = leaveParking(vehicleDTO);
-            assertEquals(200, result.getResponse().getStatus());
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        createParking(vehicleDTO);
+        MvcResult result = leaveParking(vehicleDTO);
+        assertEquals(200, result.getResponse().getStatus());
     }
 
     @Test
-    public void leaveParkingNotFoundTest() {
+    public void leaveParkingNotFoundTest() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_CAR_EX2).buildDTO();
-        try {
-            MvcResult result = leaveParking(vehicleDTO);
-            assertEquals(400, result.getResponse().getStatus());
-            JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
-            assertEquals(VehicleDataBuilder.MESSAGE_INVALID_VEHICLE_NOT_FOUND, resp.get("message"));
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        MvcResult result = leaveParking(vehicleDTO);
+        assertEquals(400, result.getResponse().getStatus());
+        JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
+        assertEquals(VehicleDataBuilder.MESSAGE_INVALID_VEHICLE_NOT_FOUND, resp.get("message"));
     }
 
     @Test
-    public void leaveParkingMotorcycleOverfareTest() {
+    public void leaveParkingMotorcycleOverfareTest() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_MOTORCYCLE_EX)
                 .withCylinderPower(700).buildDTO();
-        try {
-            createParking(vehicleDTO);
-            MvcResult result = leaveParking(vehicleDTO);
-            JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
-            assertEquals(200, result.getResponse().getStatus());
-            assertEquals(BigDecimal.valueOf(motorcycleFareHour + motorcycleOverFare), BigDecimal.valueOf((int) resp.get("fare")));
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        createParking(vehicleDTO);
+        MvcResult result = leaveParking(vehicleDTO);
+        JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals(BigDecimal.valueOf(motorcycleFareHour + motorcycleOverFare), BigDecimal.valueOf((int) resp.get("fare")));
     }
 
     @Test
-    public void leaveParkingMotorcycleTest() {
+    public void leaveParkingMotorcycleTest() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_MOTORCYCLE_EX2)
                 .withCylinderPower(125).buildDTO();
-        try {
-            createParking(vehicleDTO);
-            MvcResult result = leaveParking(vehicleDTO);
-            JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
-            assertEquals(200, result.getResponse().getStatus());
-            assertEquals(BigDecimal.valueOf(motorcycleFareHour), BigDecimal.valueOf((int) resp.get("fare")));
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        createParking(vehicleDTO);
+        MvcResult result = leaveParking(vehicleDTO);
+        JSONObject resp = new JSONObject(result.getResponse().getContentAsString());
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals(BigDecimal.valueOf(motorcycleFareHour), BigDecimal.valueOf((int) resp.get("fare")));
     }
 
     @Test
-    public void getVehiclesTest() {
+    public void getVehiclesTest() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDataBuilder().withLicensePlate(VehicleDataBuilder.LICENSE_PLATE_MOTORCYCLE_EX3)
                 .withCylinderPower(125).buildDTO();
-        try {
-            createParking(vehicleDTO);
-            MvcResult result = makeGETRequest(URL_GET_VEHICLES);
-            JSONArray resp = new JSONArray(result.getResponse().getContentAsString());
-            assertEquals(200, result.getResponse().getStatus());
-            assertEquals(Boolean.TRUE, resp.length() > 0);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        createParking(vehicleDTO);
+        MvcResult result = makeGETRequest(URL_GET_VEHICLES);
+        JSONArray resp = new JSONArray(result.getResponse().getContentAsString());
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals(Boolean.TRUE, resp.length() > 0);
     }
 
     @Test

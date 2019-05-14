@@ -68,7 +68,7 @@ public class ParkingService {
     private String trmServiceUrl;
 
     public ParkingDTO createParking(VehicleDTO vehicleDTO) {
-        clock = Clock.systemUTC();
+        clock = Clock.systemDefaultZone();
         LocalDateTime inDatetime = LocalDateTime.now(clock);
         VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(vehicleDTO.getLicensePlate());
         validateVehicleToCheckIn(vehicleDTO, vehicleType, inDatetime);
@@ -119,7 +119,7 @@ public class ParkingService {
             throw new ParkingException(Constants.ERROR_VEHICLE_NOT_PARKED);
         }
         VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(licensePlate);
-        clock = Clock.systemUTC();
+        clock = Clock.systemDefaultZone();
         parking.setOutDatetime(LocalDateTime.now(clock));
         parking.setFare(BigDecimal.valueOf(calculateParkingFare(parking, vehicleType)));
         parking = parkingPersistence.save(parking);

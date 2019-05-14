@@ -21,6 +21,9 @@ repositories {
     jcenter()
 }
 
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xms2g', '-Xmx2g']
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'

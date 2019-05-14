@@ -103,11 +103,12 @@ public class ParkingService {
 
     public Vehicle getVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
         Vehicle vehicle = vehiclePersistence.findByPlate(vehicleDTO.getLicensePlate());
-        if (null == vehicle) {
-            vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(), vehicleType.getVehicleTypeName());
-            vehicle = vehiclePersistence.saveAndFlush(vehicle);
-        }
-        return vehicle;
+        return vehicle != null ? vehicle : createVehicle(vehicleDTO, vehicleType);
+    }
+    
+    public Vehicle createVehicle(VehicleDTO vehicleDTO, VehicleTypeEnum vehicleType) {
+        Vehicle vehicle = new Vehicle(vehicleDTO.getLicensePlate(), vehicleDTO.getCylinderPower(), vehicleType.getVehicleTypeName());
+        return vehiclePersistence.saveAndFlush(vehicle);
     }
 
     public ParkingDTO leaveParking(VehicleDTO vehicleDTO) {
@@ -119,11 +120,14 @@ public class ParkingService {
             throw new ParkingException(Constants.ERROR_VEHICLE_NOT_PARKED);
         }
         VehicleTypeEnum vehicleType = VehicleTypeEnum.getVehicleTypeFromLicense(licensePlate);
+        return mapper.map(updateVehicleInformation(parking, vehicleType), ParkingDTO.class);
+    }
+    
+    public Parking updateVehicleInformation(Parking parking, VehicleTypeEnum vehicleType) {
         clock = Clock.systemDefaultZone();
         parking.setOutDatetime(LocalDateTime.now(clock));
         parking.setFare(BigDecimal.valueOf(calculateParkingFare(parking, vehicleType)));
-        parking = parkingPersistence.save(parking);
-        return mapper.map(parking, ParkingDTO.class);
+        return parkingPersistence.save(parking);
     }
 
     public int calculateParkingFare(Parking parking, VehicleTypeEnum vehicleType) {
